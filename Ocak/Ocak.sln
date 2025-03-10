@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocak2", "Ocak2\Ocak2.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocak3", "Ocak3\Ocak3.csproj", "{05DA407F-A886-4488-9AC0-602F0DC5A7BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocak4", "Ocak4\Ocak4.csproj", "{108D409F-A9F4-473B-94A7-85A400B644CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{05DA407F-A886-4488-9AC0-602F0DC5A7BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05DA407F-A886-4488-9AC0-602F0DC5A7BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05DA407F-A886-4488-9AC0-602F0DC5A7BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{108D409F-A9F4-473B-94A7-85A400B644CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{108D409F-A9F4-473B-94A7-85A400B644CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{108D409F-A9F4-473B-94A7-85A400B644CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{108D409F-A9F4-473B-94A7-85A400B644CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
