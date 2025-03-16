@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net React Ödev Mart-1", "Net React Ödev Mart-1\Net React Ödev Mart-1.csproj", "{C8AE5A64-CC2A-4DC1-98D8-8766A677AD2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mart-1", "Net React Ödev Mart-1\Mart-1.csproj", "{C8AE5A64-CC2A-4DC1-98D8-8766A677AD2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{22C171D4-2ED8-4B88-A238-1451508E968C}"
 EndProject
