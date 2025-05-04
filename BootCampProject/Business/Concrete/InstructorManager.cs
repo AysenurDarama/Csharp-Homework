@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Entities;
+using Repositories.Abstract;
 using Repositories.Concrete;
+using Repositories.EfRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +13,16 @@ namespace Business.Concrete;
 
 public class InstructorManager : IInstructorService
 {
-    private readonly InstructorRepository _instructorRepository;
+    private readonly IInstructorRepository _instructorRepository;
 
-    public InstructorManager(InstructorRepository instructorRepository)
+    public InstructorManager(IInstructorRepository instructorRepository)
     {
         _instructorRepository = instructorRepository;
     }
 
     public async Task<List<Instructor>> GetAllAsync()
     {
-        return (List<Instructor>)await _instructorRepository.GetAllAsync();
+        return (await _instructorRepository.GetAllAsync()).ToList();
     }
 
     public async Task<Instructor> GetByIdAsync(int id)
@@ -43,3 +45,4 @@ public class InstructorManager : IInstructorService
         await _instructorRepository.DeleteAsync(instructor);
     }
 }
+

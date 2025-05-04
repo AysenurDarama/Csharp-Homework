@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace Repositories.Abstract;
 
-public interface IInstructorRepository : IAsyncRepository<Instructor>
+public interface IBootcampRepository : IAsyncRepository<Bootcamp>
 {
 }

@@ -1,6 +1,6 @@
 ﻿using Entities;
-using Entities.Data;
 using Repositories.Abstract;
+using Repositories.Contexts;
 using Repositories.EfRepositories;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Repositories.Concrete;
 
-public class UserRepository : EfRepositoryBase<User>, IUserRepository
+public class EfApplicantRepository : EfRepositoryBase<Applicant, BootcampContext>, IApplicantRepository
 {
-    public UserRepository(BootcampContext context) : base(context)
+    public EfApplicantRepository(BootcampContext context) : base(context)
     {
     }
 }

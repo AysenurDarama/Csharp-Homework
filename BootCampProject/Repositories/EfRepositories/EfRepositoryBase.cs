@@ -1,19 +1,22 @@
 ﻿using Core.Interfaces;
-using Entities.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
+using System.Linq.Expressions;
 
 namespace Repositories.EfRepositories;
 
-public class EfRepositoryBase<T> : IAsyncRepository<T> where T : class
+public class EfRepositoryBase<T, TContext> : IAsyncRepository<T>
+    where T : class
+    where TContext : DbContext
 {
-    protected readonly BootcampContext _context;
+    protected readonly TContext _context;
 
-    public EfRepositoryBase(BootcampContext context)
+    public EfRepositoryBase(TContext context)
     {
         _context = context;
     }
@@ -48,4 +51,16 @@ public class EfRepositoryBase<T> : IAsyncRepository<T> where T : class
         await _context.SaveChangesAsync();
         return entity;
     }
+    public async Task<T> GetAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _context.Set<T>().FirstOrDefaultAsync(predicate);
+    }
+
+    public async Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _context.Set<T>().Where(predicate).ToListAsync();
+    }
 }
+
+
+
