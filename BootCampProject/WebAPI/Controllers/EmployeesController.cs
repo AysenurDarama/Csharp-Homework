@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Dtos.Requests.Employee;
 using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,11 +8,11 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
 
-        public EmployeesController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
@@ -19,36 +20,37 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var employees = await _employeeService.GetAllAsync();
-            return Ok(employees);
+            var result = await _employeeService.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var employee = await _employeeService.GetByIdAsync(id);
-            return Ok(employee);
+            var result = await _employeeService.GetByIdAsync(id);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Employee employee)
+        public async Task<IActionResult> Add([FromBody] CreateEmployeeRequest request)
         {
-            var addedEmployee = await _employeeService.AddAsync(employee);
-            return Ok(addedEmployee);
+            var result = await _employeeService.AddAsync(request);
+            return Created("", result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Employee employee)
+        public async Task<IActionResult> Update([FromBody] UpdateEmployeeRequest request)
         {
-            var updatedEmployee = await _employeeService.UpdateAsync(employee);
-            return Ok(updatedEmployee);
+            var result = await _employeeService.UpdateAsync(request);
+            return Ok(result);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Employee employee)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            await _employeeService.DeleteAsync(employee);
-            return Ok();
+            var result = await _employeeService.DeleteAsync(id);
+            return Ok(result);
         }
     }
+
 }

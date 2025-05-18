@@ -1,4 +1,7 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
+using Business.Dtos.Requests.User;
+using Business.Dtos.Responses.User;
 using Entities;
 using Repositories.Abstract;
 using System;
@@ -12,34 +15,45 @@ namespace Business.Concrete;
 public class UserManager : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public UserManager(IUserRepository userRepository)
+    public UserManager(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
-    public async Task<List<User>> GetAllAsync()
+    public async Task<List<GetUserResponse>> GetAllAsync()
     {
-        return (List<User>)await _userRepository.GetAllAsync();
+        var users = await _userRepository.GetAllAsync();
+        return _mapper.Map<List<GetUserResponse>>(users);
     }
 
-    public async Task<User> GetByIdAsync(int id)
+    public async Task<GetUserResponse> GetByIdAsync(int id)
     {
-        return await _userRepository.GetByIdAsync(id);
+        var user = await _userRepository.GetByIdAsync(id);
+        return _mapper.Map<GetUserResponse>(user);
     }
 
-    public async Task<User> AddAsync(User user)
+    public async Task<CreatedUserResponse> AddAsync(CreateUserRequest request)
     {
-        return await _userRepository.AddAsync(user);
+        var user = _mapper.Map<User>(request);
+        var createdUser = await _userRepository.AddAsync(user);
+        return _mapper.Map<CreatedUserResponse>(createdUser);
     }
 
-    public async Task<User> UpdateAsync(User user)
+    public async Task<UpdatedUserResponse> UpdateAsync(UpdateUserRequest request)
     {
-        return await _userRepository.UpdateAsync(user);
+        var user = _mapper.Map<User>(request);
+        var updatedUser = await _userRepository.UpdateAsync(user);
+        return _mapper.Map<UpdatedUserResponse>(updatedUser);
     }
 
-    public async Task DeleteAsync(User user)
+    public async Task<DeletedUserResponse> DeleteAsync(int id)
     {
-        await _userRepository.DeleteAsync(user);
+        var user = await _userRepository.GetByIdAsync(id);
+        var deletedUser = await _userRepository.DeleteAsync(user);
+        return _mapper.Map<DeletedUserResponse>(deletedUser);
     }
 }
+

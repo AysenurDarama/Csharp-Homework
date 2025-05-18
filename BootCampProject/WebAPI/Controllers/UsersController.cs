@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Dtos.Requests.User;
 using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,11 +8,11 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
 
-        public UsersController(IUserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
@@ -19,36 +20,37 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userService.GetAllAsync();
-            return Ok(users);
+            var result = await _userService.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var user = await _userService.GetByIdAsync(id);
-            return Ok(user);
+            var result = await _userService.GetByIdAsync(id);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(User user)
+        public async Task<IActionResult> Add([FromBody] CreateUserRequest request)
         {
-            var addedUser = await _userService.AddAsync(user);
-            return Ok(addedUser);
+            var result = await _userService.AddAsync(request);
+            return Created("", result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(User user)
+        public async Task<IActionResult> Update([FromBody] UpdateUserRequest request)
         {
-            var updatedUser = await _userService.UpdateAsync(user);
-            return Ok(updatedUser);
+            var result = await _userService.UpdateAsync(request);
+            return Ok(result);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(User user)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            await _userService.DeleteAsync(user);
-            return Ok();
+            var result = await _userService.DeleteAsync(id);
+            return Ok(result);
         }
     }
+
 }

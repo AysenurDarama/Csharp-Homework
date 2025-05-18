@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Dtos.Requests.Applicant;
 using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,11 +8,11 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicantsController : ControllerBase
+    public class ApplicantController : ControllerBase
     {
         private readonly IApplicantService _applicantService;
 
-        public ApplicantsController(IApplicantService applicantService)
+        public ApplicantController(IApplicantService applicantService)
         {
             _applicantService = applicantService;
         }
@@ -19,36 +20,37 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var applicants = await _applicantService.GetAllAsync();
-            return Ok(applicants);
+            var result = await _applicantService.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var applicant = await _applicantService.GetByIdAsync(id);
-            return Ok(applicant);
+            var result = await _applicantService.GetByIdAsync(id);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Applicant applicant)
+        public async Task<IActionResult> Add([FromBody] CreateApplicantRequest request)
         {
-            var addedApplicant = await _applicantService.AddAsync(applicant);
-            return Ok(addedApplicant);
+            var result = await _applicantService.AddAsync(request);
+            return Created("", result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Applicant applicant)
+        public async Task<IActionResult> Update([FromBody] UpdateApplicantRequest request)
         {
-            var updatedApplicant = await _applicantService.UpdateAsync(applicant);
-            return Ok(updatedApplicant);
+            var result = await _applicantService.UpdateAsync(request);
+            return Ok(result);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Applicant applicant)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            await _applicantService.DeleteAsync(applicant);
-            return Ok();
+            var result = await _applicantService.DeleteAsync(id);
+            return Ok(result);
         }
     }
+
 }

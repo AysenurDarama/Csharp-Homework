@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using Business.Dtos.Requests.Employee;
+using Business.Dtos.Responses.Employee;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,9 @@ namespace Business.Abstract;
 
 public interface IEmployeeService
 {
-    Task<List<Employee>> GetAllAsync();
-    Task<Employee> GetByIdAsync(int id);
-    Task<Employee> AddAsync(Employee employee);
-    Task<Employee> UpdateAsync(Employee employee);
-    Task DeleteAsync(Employee employee);
+    Task<List<GetEmployeeResponse>> GetAllAsync();
+    Task<GetEmployeeResponse> GetByIdAsync(int id);
+    Task<CreatedEmployeeResponse> AddAsync(CreateEmployeeRequest request);
+    Task<UpdatedEmployeeResponse> UpdateAsync(UpdateEmployeeRequest request);
+    Task<DeletedEmployeeResponse> DeleteAsync(int id);
 }

@@ -1,4 +1,7 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
+using Business.Dtos.Requests.Instructor;
+using Business.Dtos.Responses.Instructor;
 using Entities;
 using Repositories.Abstract;
 using Repositories.Concrete;
@@ -14,35 +17,45 @@ namespace Business.Concrete;
 public class InstructorManager : IInstructorService
 {
     private readonly IInstructorRepository _instructorRepository;
+    private readonly IMapper _mapper;
 
-    public InstructorManager(IInstructorRepository instructorRepository)
+    public InstructorManager(IInstructorRepository instructorRepository, IMapper mapper)
     {
         _instructorRepository = instructorRepository;
+        _mapper = mapper;
     }
 
-    public async Task<List<Instructor>> GetAllAsync()
+    public async Task<List<GetInstructorResponse>> GetAllAsync()
     {
-        return (await _instructorRepository.GetAllAsync()).ToList();
+        var instructors = await _instructorRepository.GetAllAsync();
+        return _mapper.Map<List<GetInstructorResponse>>(instructors);
     }
 
-    public async Task<Instructor> GetByIdAsync(int id)
+    public async Task<GetInstructorResponse> GetByIdAsync(int id)
     {
-        return await _instructorRepository.GetByIdAsync(id);
+        var instructor = await _instructorRepository.GetByIdAsync(id);
+        return _mapper.Map<GetInstructorResponse>(instructor);
     }
 
-    public async Task<Instructor> AddAsync(Instructor instructor)
+    public async Task<CreatedInstructorResponse> AddAsync(CreateInstructorRequest request)
     {
-        return await _instructorRepository.AddAsync(instructor);
+        var instructor = _mapper.Map<Instructor>(request);
+        var added = await _instructorRepository.AddAsync(instructor);
+        return _mapper.Map<CreatedInstructorResponse>(added);
     }
 
-    public async Task<Instructor> UpdateAsync(Instructor instructor)
+    public async Task<UpdatedInstructorResponse> UpdateAsync(UpdateInstructorRequest request)
     {
-        return await _instructorRepository.UpdateAsync(instructor);
+        var instructor = _mapper.Map<Instructor>(request);
+        var updated = await _instructorRepository.UpdateAsync(instructor);
+        return _mapper.Map<UpdatedInstructorResponse>(updated);
     }
 
-    public async Task DeleteAsync(Instructor instructor)
+    public async Task<DeletedInstructorResponse> DeleteAsync(int id)
     {
-        await _instructorRepository.DeleteAsync(instructor);
+        var instructor = await _instructorRepository.GetByIdAsync(id);
+        var deleted = await _instructorRepository.DeleteAsync(instructor);
+        return _mapper.Map<DeletedInstructorResponse>(deleted);
     }
 }
 

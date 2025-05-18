@@ -1,4 +1,9 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
+using Business.Dtos.Requests.Applicant;
+using Business.Dtos.Responses.Applicant;
+using Business.Rules;
+using Core.Exceptions;
 using Entities;
 using Repositories.Abstract;
 using System;
@@ -12,34 +17,62 @@ namespace Business.Concrete;
 public class ApplicantManager : IApplicantService
 {
     private readonly IApplicantRepository _applicantRepository;
+    private readonly IMapper _mapper;
+    private readonly ApplicantBusinessRules _applicantBusinessRules;
 
-    public ApplicantManager(IApplicantRepository applicantRepository)
+    public ApplicantManager(
+        IApplicantRepository applicantRepository,
+        IMapper mapper,
+        ApplicantBusinessRules applicantBusinessRules)
     {
         _applicantRepository = applicantRepository;
+        _mapper = mapper;
+        _applicantBusinessRules = applicantBusinessRules;
     }
 
-    public async Task<List<Applicant>> GetAllAsync()
+    public async Task<List<GetApplicantResponse>> GetAllAsync()
     {
-        return (List<Applicant>)await _applicantRepository.GetAllAsync();
+        var applicants = await _applicantRepository.GetAllAsync();
+        return _mapper.Map<List<GetApplicantResponse>>(applicants);
     }
 
-    public async Task<Applicant> GetByIdAsync(int id)
+    public async Task<GetApplicantResponse> GetByIdAsync(int id)
     {
-        return await _applicantRepository.GetByIdAsync(id);
+        var applicant = await _applicantRepository.GetByIdAsync(id);
+        if (applicant == null)
+            throw new NotFoundException($"Id'si {id} olan başvuru sahibi bulunamadı.");
+
+        return _mapper.Map<GetApplicantResponse>(applicant);
     }
 
-    public async Task<Applicant> AddAsync(Applicant applicant)
+    public async Task<CreatedApplicantResponse> AddAsync(CreateApplicantRequest request)
     {
-        return await _applicantRepository.AddAsync(applicant);
+        await _applicantBusinessRules.ApplicantNationalIdCannotBeDuplicated(request.NationalIdentity);
+        await _applicantBusinessRules.ApplicantCannotBeInBlacklistByNationalId(request.NationalIdentity);
+
+        var applicant = _mapper.Map<Applicant>(request);
+        var created = await _applicantRepository.AddAsync(applicant);
+        return _mapper.Map<CreatedApplicantResponse>(created);
     }
 
-    public async Task<Applicant> UpdateAsync(Applicant applicant)
+    public async Task<UpdatedApplicantResponse> UpdateAsync(UpdateApplicantRequest request)
     {
-        return await _applicantRepository.UpdateAsync(applicant);
+        await _applicantBusinessRules.CheckIfApplicantExists(request.Id);
+
+        var applicant = _mapper.Map<Applicant>(request);
+        var updated = await _applicantRepository.UpdateAsync(applicant);
+        return _mapper.Map<UpdatedApplicantResponse>(updated);
     }
 
-    public async Task DeleteAsync(Applicant applicant)
+    public async Task<DeletedApplicantResponse> DeleteAsync(int id)
     {
-        await _applicantRepository.DeleteAsync(applicant);
+        await _applicantBusinessRules.CheckIfApplicantExists(id);
+
+        var applicant = await _applicantRepository.GetByIdAsync(id);
+        var deleted = await _applicantRepository.DeleteAsync(applicant);
+        return _mapper.Map<DeletedApplicantResponse>(deleted);
     }
 }
+
+
+

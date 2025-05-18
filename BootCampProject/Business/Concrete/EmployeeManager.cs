@@ -1,4 +1,7 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
+using Business.Dtos.Requests.Employee;
+using Business.Dtos.Responses.Employee;
 using Entities;
 using Repositories.Abstract;
 using System;
@@ -12,34 +15,45 @@ namespace Business.Concrete;
 public class EmployeeManager : IEmployeeService
 {
     private readonly IEmployeeRepository _employeeRepository;
+    private readonly IMapper _mapper;
 
-    public EmployeeManager(IEmployeeRepository employeeRepository)
+    public EmployeeManager(IEmployeeRepository employeeRepository, IMapper mapper)
     {
         _employeeRepository = employeeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<List<Employee>> GetAllAsync()
+    public async Task<List<GetEmployeeResponse>> GetAllAsync()
     {
-        return (List<Employee>)await _employeeRepository.GetAllAsync();
+        var employees = await _employeeRepository.GetAllAsync();
+        return _mapper.Map<List<GetEmployeeResponse>>(employees);
     }
 
-    public async Task<Employee> GetByIdAsync(int id)
+    public async Task<GetEmployeeResponse> GetByIdAsync(int id)
     {
-        return await _employeeRepository.GetByIdAsync(id);
+        var employee = await _employeeRepository.GetByIdAsync(id);
+        return _mapper.Map<GetEmployeeResponse>(employee);
     }
 
-    public async Task<Employee> AddAsync(Employee employee)
+    public async Task<CreatedEmployeeResponse> AddAsync(CreateEmployeeRequest request)
     {
-        return await _employeeRepository.AddAsync(employee);
+        var employee = _mapper.Map<Employee>(request);
+        var created = await _employeeRepository.AddAsync(employee);
+        return _mapper.Map<CreatedEmployeeResponse>(created);
     }
 
-    public async Task<Employee> UpdateAsync(Employee employee)
+    public async Task<UpdatedEmployeeResponse> UpdateAsync(UpdateEmployeeRequest request)
     {
-        return await _employeeRepository.UpdateAsync(employee);
+        var employee = _mapper.Map<Employee>(request);
+        var updated = await _employeeRepository.UpdateAsync(employee);
+        return _mapper.Map<UpdatedEmployeeResponse>(updated);
     }
 
-    public async Task DeleteAsync(Employee employee)
+    public async Task<DeletedEmployeeResponse> DeleteAsync(int id)
     {
-        await _employeeRepository.DeleteAsync(employee);
+        var employee = await _employeeRepository.GetByIdAsync(id);
+        var deleted = await _employeeRepository.DeleteAsync(employee);
+        return _mapper.Map<DeletedEmployeeResponse>(deleted);
     }
 }
+

@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using Business.Dtos.Requests.Instructor;
+using Business.Dtos.Responses.Instructor;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,9 @@ namespace Business.Abstract;
 
 public interface IInstructorService
 {
-    Task<List<Instructor>> GetAllAsync();
-    Task<Instructor> GetByIdAsync(int id);
-    Task<Instructor> AddAsync(Instructor instructor);
-    Task<Instructor> UpdateAsync(Instructor instructor);
-    Task DeleteAsync(Instructor instructor);
+    Task<List<GetInstructorResponse>> GetAllAsync();
+    Task<GetInstructorResponse> GetByIdAsync(int id);
+    Task<CreatedInstructorResponse> AddAsync(CreateInstructorRequest request);
+    Task<UpdatedInstructorResponse> UpdateAsync(UpdateInstructorRequest request);
+    Task<DeletedInstructorResponse> DeleteAsync(int id);
 }

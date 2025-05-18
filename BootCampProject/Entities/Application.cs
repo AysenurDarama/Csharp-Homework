@@ -10,18 +10,19 @@ public class Application
 {
     public int Id { get; set; }
     public int ApplicantId { get; set; }
-    public int BootcampId { get; set; }
-    public ApplicationState ApplicationState { get; set; }
-
-    // Navigation properties
     public Applicant Applicant { get; set; }
+
+    public int BootcampId { get; set; }
     public Bootcamp Bootcamp { get; set; }
+
+    public ApplicationState ApplicationState { get; set; }
 }
+
 public enum ApplicationState
 {
-    PENDING,
-    APPROVED,
-    REJECTED,
-    IN_REVIEW,
-    CANCELLED
+    PENDING = 0,
+    APPROVED = 1,
+    REJECTED = 2,
+    IN_REVIEW = 3,
+    CANCELLED = 4
 }

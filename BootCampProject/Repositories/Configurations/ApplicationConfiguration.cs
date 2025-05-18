@@ -19,15 +19,19 @@ public class ApplicationConfiguration : IEntityTypeConfiguration<Application>
 
         builder.Property(a => a.ApplicantId).IsRequired();
         builder.Property(a => a.BootcampId).IsRequired();
-        builder.Property(a => a.ApplicationState).IsRequired();
+
+        builder.Property(a => a.ApplicationState)
+               .HasConversion<int>() 
+               .IsRequired();
 
         builder.HasOne(a => a.Applicant)
                .WithMany()
-               .HasForeignKey(a => a.ApplicantId);
+               .HasForeignKey(a => a.ApplicantId)
+               .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(a => a.Bootcamp)
                .WithMany()
-               .HasForeignKey(a => a.BootcampId);
+               .HasForeignKey(a => a.BootcampId)
+               .OnDelete(DeleteBehavior.NoAction);
     }
-
 }
