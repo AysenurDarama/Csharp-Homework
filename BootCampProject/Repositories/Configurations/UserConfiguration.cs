@@ -15,10 +15,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Id).HasColumnName("Id");
         builder.Property(u => u.FirstName).HasColumnName("FirstName").IsRequired();
         builder.Property(u => u.LastName).HasColumnName("LastName").IsRequired();
-        builder.Property(u => u.NationalIdentity).HasColumnName("NationalIdentity").IsRequired();
+        builder.Property(u => u.NationalityIdentity).HasColumnName("NationalIdentity").IsRequired();
         builder.Property(u => u.DateOfBirth).HasColumnName("DateOfBirth").IsRequired();
         builder.Property(u => u.Email).HasColumnName("Email").IsRequired();
-        builder.Property(u => u.Password).HasColumnName("Password").IsRequired();
+
+        builder.Property(u => u.PasswordHash).HasColumnName("PasswordHash").IsRequired();
+        builder.Property(u => u.PasswordSalt).HasColumnName("PasswordSalt").IsRequired();
+
         builder.Property(u => u.UserType).HasColumnName("UserType").IsRequired();
     }
 }

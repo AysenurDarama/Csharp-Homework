@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,5 @@ public class UpdateApplicationRequest
     public int Id { get; set; }
     public int ApplicantId { get; set; }
     public int BootcampId { get; set; }
-    public int ApplicationState { get; set; }
+    public ApplicationState ApplicationState { get; set; }
 }

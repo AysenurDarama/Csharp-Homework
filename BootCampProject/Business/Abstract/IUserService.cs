@@ -16,4 +16,6 @@ public interface IUserService
     Task<CreatedUserResponse> AddAsync(CreateUserRequest request);
     Task<UpdatedUserResponse> UpdateAsync(UpdateUserRequest request);
     Task<DeletedUserResponse> DeleteAsync(int id);
+    Task AddAsync(User user);
+
 }

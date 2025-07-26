@@ -55,5 +55,11 @@ public class UserManager : IUserService
         var deletedUser = await _userRepository.DeleteAsync(user);
         return _mapper.Map<DeletedUserResponse>(deletedUser);
     }
+
+    public async Task AddAsync(User user)
+    {
+        await _userRepository.AddAsync(user);
+    }
+
 }
 

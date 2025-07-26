@@ -25,14 +25,14 @@ public class ApplicantBusinessRules
 
     public async Task ApplicantNationalIdCannotBeDuplicated(string nationalId)
     {
-        var existing = await _applicantRepository.GetAsync(a => a.NationalIdentity == nationalId);
+        var existing = await _applicantRepository.GetAsync(a => a.NationalityIdentity == nationalId);
         if (existing != null)
             throw new BusinessException("Bu TC kimlik numarası zaten kayıtlı.");
     }
 
     public async Task ApplicantCannotBeInBlacklistByNationalId(string nationalId)
     {
-        var applicant = await _applicantRepository.GetAsync(a => a.NationalIdentity == nationalId);
+        var applicant = await _applicantRepository.GetAsync(a => a.NationalityIdentity == nationalId);
         if (applicant == null) return; 
 
         var blacklist = await _blacklistRepository.GetAsync(b => b.ApplicantId == applicant.Id);
